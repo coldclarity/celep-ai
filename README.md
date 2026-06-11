@@ -1,22 +1,39 @@
-# Celep.ai — Website
+# celep.ai — Persönliche Website Burak Celep
 
-Astro-Projekt für Deployment auf Webflow Cloud (oder jedem anderen Host).
+Astro-Site, gehostet als Cloudflare Worker. Live: https://celep.ai
 
-## Lokal starten
+## Struktur
 ```
-npm install
-npm run dev
+src/pages/index.astro        → Startseite (Hero, Haltung, Themen, Projekte, Kontakt)
+src/pages/impressum.astro    → celep.ai/impressum
+src/pages/datenschutz.astro  → celep.ai/datenschutz
+astro.config.mjs             → Astro-Konfiguration
+wrangler.toml                → Cloudflare-Worker-Konfiguration
+package.json / -lock.json    → Abhängigkeiten
 ```
 
-## Deployment auf Webflow Cloud
-1. Neues GitHub-Repository erstellen (z. B. `celep-ai`) und diese Dateien pushen.
-2. In Webflow: **Neue App → Deploy in Webflow Cloud → Importiere ein GitHub-Repository**.
-3. Repository `celep-ai` auswählen → Framework **Astro** wird erkannt.
-4. Branch (main) und Mount-Pfad wählen. Bei einem Unterpfad (z. B. /app)
-   in `astro.config.mjs` die `base`-Option setzen (siehe Kommentar dort).
-5. Deploy — jeder weitere Push auf main deployt automatisch.
+## ⚠️ Vor dem Livegang
+- [ ] In `impressum.astro` und `datenschutz.astro`: Platzhalter `[STRASSE UND HAUSNUMMER]`
+      und `[PLZ]` durch die echte ladungsfähige Anschrift ersetzen (§5 DDG Pflicht)
 
-## Alternative: GitHub Pages
-Die Datei `src/pages/index.astro` ist ein vollständiges HTML-Dokument.
-Für GitHub Pages genügt es, sie als `index.html` in ein Repo zu legen
-und Pages in den Repo-Einstellungen zu aktivieren.
+## Deployment-Wege
+
+### A) GitHub Web (wie bisher)
+Datei in GitHub bearbeiten/hochladen → Commit → Cloudflare baut automatisch
+(falls Git-Integration verbunden), sonst Weg B.
+
+### B) Lokal mit VS Code (empfohlen für kleine Korrekturen)
+```bash
+git clone https://github.com/coldclarity/celep-ai.git
+cd celep-ai
+npm install          # einmalig
+npx astro dev        # Live-Vorschau auf localhost:4321
+npm run build        # Produktions-Build nach ./dist
+npx wrangler deploy  # Veröffentlichen (einmalig: npx wrangler login)
+```
+
+### Cloudflare Git-Integration (Workers Builds)
+Workers & Pages → celep-ai → Einstellungen → Build:
+- Build-Befehl: `npm run build`
+- Deploy-Befehl: `npx wrangler deploy`
+Dann deployt jeder GitHub-Commit automatisch.
