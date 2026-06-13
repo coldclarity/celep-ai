@@ -1,0 +1,432 @@
+---
+// Magazin — celep.ai
+// News & Blogartikel als modulare Baukästen, mit Themenfeldern, Suche und Filter.
+const articles = [
+  {
+    title: "Lieber ehrlich unbequem als freundlich falsch",
+    excerpt: "Warum direkte Kommunikation die höchste Form von Respekt ist — und das falsche Lächeln in einer ehrlichen Verbindung nichts zu suchen hat.",
+    category: "Philosophie",
+    date: "11. Juni 2026", iso: "2026-06-11", read: "6 Min",
+    href: "#", featured: true
+  },
+  {
+    title: "Charakter entsteht durch Handlung",
+    excerpt: "Wir definieren uns nicht über Worte, sondern über Taten. Ein Blick darauf, wie wir unser eigenes Schicksal formen.",
+    category: "Philosophie",
+    date: "4. Juni 2026", iso: "2026-06-04", read: "4 Min", href: "#"
+  },
+  {
+    title: "Die Kunst, Fehler zu feiern",
+    excerpt: "So lange fragen, bis man es wirklich verstanden hat — über eine Kultur, in der aus Fehlern echtes Wachstum wird.",
+    category: "Psychologie",
+    date: "28. Mai 2026", iso: "2026-05-28", read: "5 Min", href: "#"
+  },
+  {
+    title: "Werkzeuge, die den Menschen erweitern",
+    excerpt: "Technologie sollte Fähigkeiten vergrößern, nicht ersetzen. Gedanken zu einer KI, die dem Menschen dient.",
+    category: "Technologie",
+    date: "21. Mai 2026", iso: "2026-05-21", read: "5 Min", href: "#"
+  },
+  {
+    title: "Wertschöpfung neu gedacht",
+    excerpt: "Die Herausforderungen Deutschlands als Gestaltungsauftrag — Arbeit, die über den Einzelnen hinaus Wert schafft.",
+    category: "Gesellschaft",
+    date: "14. Mai 2026", iso: "2026-05-14", read: "6 Min", href: "#"
+  },
+  {
+    title: "Zwischen den Zeilen lesen",
+    excerpt: "Was indirekte Kommunikation über den Charakter verrät — und warum Klarheit am Ende entwaffnet.",
+    category: "Psychologie",
+    date: "7. Mai 2026", iso: "2026-05-07", read: "5 Min", href: "#"
+  },
+  {
+    title: "Erkenntnis als Quelle von Glück",
+    excerpt: "Stetiges Lernen ist kein Mittel zum Zweck. Über Neugier als die verlässlichste Form der Glückseligkeit.",
+    category: "Wissenschaft",
+    date: "30. April 2026", iso: "2026-04-30", read: "4 Min", href: "#"
+  },
+  {
+    title: "Körper, Psyche und das Umfeld",
+    excerpt: "Gesundheit ganzheitlich gedacht: Warum sich Wohlbefinden nie auf einen einzigen Faktor reduzieren lässt.",
+    category: "Gesundheit",
+    date: "23. April 2026", iso: "2026-04-23", read: "5 Min", href: "#"
+  }
+];
+
+const categories = ["Alle", "Philosophie", "Psychologie", "Gesellschaft", "Technologie", "Wissenschaft", "Gesundheit"];
+const featured = articles.find(a => a.featured);
+const rest = articles.filter(a => !a.featured);
+const haystack = (a) => `${a.title} ${a.excerpt} ${a.category}`.toLowerCase();
+---
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0B120D">
+<title>Magazin — CELEP.AI</title>
+<meta name="description" content="Magazin von Burak Celep — Gedanken zu Philosophie, Psychologie, Technologie und Gesellschaft. Ehrlichkeit, Charakter und eine Kultur, die wachsen lässt.">
+<meta property="og:title" content="Magazin — Celep.ai">
+<meta property="og:description" content="Gedanken mit Substanz: Philosophie, Psychologie, Technologie und Gesellschaft.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://celep.ai/magazin">
+<meta property="og:image" content="https://celep.ai/images/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Schibsted+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style is:global>
+  :root{
+    --bg:    #0B120D;
+    --bg-2:  #101911;
+    --ink:   #E9EBE2;
+    --muted: #97A293;
+    --leaf:  #8FB98B;
+    --glow:  #C8E8BC;
+    --line:  rgba(210, 224, 206, 0.13);
+    --max:   1120px;
+    --pad:   clamp(20px, 5vw, 56px);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Schibsted Grotesk', system-ui, sans-serif;
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--leaf); color:var(--bg); }
+  a{ color:inherit; }
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--leaf);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+  .wrap{ max-width:var(--max); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad); }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--leaf);
+  }
+
+  /* ---------- Navigation ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    backdrop-filter:blur(12px);
+    background:rgba(11,18,13,0.6);
+    border-bottom:1px solid transparent;
+    transition:border-color .4s;
+  }
+  nav.scrolled{ border-bottom-color:var(--line); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .nav-brand{
+    font-family:'Archivo', sans-serif; font-variation-settings:'wdth' 120;
+    font-size:16px; font-weight:800; letter-spacing:0.08em;
+    text-transform:uppercase; text-decoration:none;
+  }
+  .nav-brand em{ font-style:normal; color:var(--leaf); }
+  .nav-links{ display:flex; gap:28px; }
+  .nav-links a{ font-size:13.5px; color:var(--muted); text-decoration:none; transition:color .25s; }
+  .nav-links a:hover{ color:var(--ink); }
+  .nav-links a[aria-current="page"]{ color:var(--leaf); }
+  @media (max-width:640px){ .nav-links{ display:none; } }
+
+  /* ---------- Magazin-Header ---------- */
+  .mag-head{ padding:calc(64px + clamp(56px, 11vw, 120px)) 0 clamp(36px, 6vw, 60px); }
+  .mag-head .eyebrow{ display:block; margin-bottom:22px; }
+  .mag-head h1{
+    font-family:'Archivo', sans-serif; font-variation-settings:'wdth' 125;
+    font-weight:850; font-size:clamp(40px, 8vw, 96px); line-height:0.94;
+    letter-spacing:-0.01em; text-transform:uppercase;
+  }
+  .mag-head h1 em{ font-style:normal; color:var(--leaf); }
+  .mag-head .lead{
+    margin-top:26px; max-width:54ch; color:var(--muted); font-size:17px;
+  }
+
+  /* ---------- Such- & Filterzeile (klebrig) ---------- */
+  .mag-controls{
+    position:sticky; top:64px; z-index:40;
+    background:rgba(11,18,13,0.86); backdrop-filter:blur(12px);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .mag-controls-inner{ padding:18px 0; }
+  .mag-search{ position:relative; margin-bottom:16px; max-width:520px; }
+  .mag-search svg{
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    width:16px; height:16px; stroke:var(--leaf); pointer-events:none;
+  }
+  .mag-search input{
+    width:100%;
+    font-family:'Schibsted Grotesk', sans-serif; font-size:15px; color:var(--ink);
+    background:var(--bg-2); border:1px solid var(--line); border-radius:0;
+    padding:13px 16px 13px 40px;
+    transition:border-color .25s, background .25s;
+  }
+  .mag-search input::placeholder{ color:var(--muted); }
+  .mag-search input:hover{ border-color:rgba(143,185,139,0.35); }
+
+  .mag-filters{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .mag-chips{ display:flex; gap:10px; flex-wrap:wrap; }
+  .mag-chip{
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--muted); background:transparent;
+    border:1px solid var(--line); border-radius:0;
+    padding:7px 14px; cursor:pointer;
+    transition:color .25s, border-color .25s, background .25s;
+  }
+  .mag-chip:hover{ color:var(--ink); border-color:rgba(143,185,139,0.4); }
+  .mag-chip.is-active{
+    color:var(--bg); background:var(--leaf); border-color:var(--leaf);
+  }
+  .mag-count{
+    margin-left:auto;
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--muted);
+    white-space:nowrap;
+  }
+  @media (max-width:640px){ .mag-count{ margin-left:0; width:100%; } }
+
+  /* ---------- Karten-Bausteine ---------- */
+  .mag-section{ padding:clamp(40px, 7vw, 72px) 0 clamp(80px, 12vw, 130px); }
+  .mag-grid{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:18px;
+  }
+  @media (max-width:900px){ .mag-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:600px){ .mag-grid{ grid-template-columns:1fr; } }
+
+  .mag-card{
+    display:flex; flex-direction:column;
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    padding:26px 24px 22px;
+    text-decoration:none;
+    min-height:230px;
+    transition:border-color .3s ease, transform .3s ease, background .3s ease;
+  }
+  .mag-card[hidden]{ display:none; }
+  .mag-card:hover{ border-color:rgba(143,185,139,0.45); transform:translateY(-4px); }
+  .mag-card .c-cat{ margin-bottom:16px; }
+  .mag-card .c-title{
+    font-family:'Archivo', sans-serif; font-variation-settings:'wdth' 110;
+    font-weight:750; font-size:21px; line-height:1.14; letter-spacing:-0.005em;
+    color:var(--ink); transition:color .3s;
+  }
+  .mag-card:hover .c-title{ color:var(--glow); }
+  .mag-card .c-excerpt{
+    margin-top:12px; color:var(--muted); font-size:14.5px; line-height:1.55;
+    max-width:42ch;
+  }
+  .mag-card .c-meta{
+    margin-top:auto; padding-top:20px;
+    display:flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px;
+    letter-spacing:0.08em; color:var(--muted);
+  }
+  .mag-card .c-meta .dot{ width:3px; height:3px; border-radius:50%; background:var(--muted); }
+
+  /* Aufmacher */
+  .mag-card.feat{
+    grid-column:1 / -1;
+    flex-direction:row; align-items:flex-end; gap:40px;
+    background:linear-gradient(135deg, #12200f 0%, var(--bg-2) 60%);
+    border-color:rgba(143,185,139,0.28);
+    min-height:auto; padding:34px 32px;
+  }
+  .mag-card.feat .c-body{ flex:1 1 0; }
+  .mag-card.feat .c-title{
+    font-variation-settings:'wdth' 116; font-weight:800;
+    font-size:clamp(26px, 4vw, 40px); line-height:1.04;
+  }
+  .mag-card.feat .c-excerpt{ font-size:16px; max-width:56ch; }
+  .mag-card.feat .c-meta{ margin-top:0; padding-top:0; flex-shrink:0; align-self:flex-end; }
+  @media (max-width:760px){
+    .mag-card.feat{ flex-direction:column; align-items:flex-start; gap:18px; padding:28px 24px; }
+    .mag-card.feat .c-meta{ align-self:flex-start; }
+  }
+
+  /* Leerzustand */
+  .mag-empty{
+    text-align:center; padding:70px 0; color:var(--muted);
+    border:1px dashed var(--line);
+  }
+  .mag-empty strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:6px; }
+  .mag-empty[hidden]{ display:none; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:44px 0 50px; border-top:1px solid var(--line); }
+  .footer-inner{
+    display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+    color:var(--muted); font-size:13px;
+  }
+  .footer-inner a{ color:var(--muted); text-decoration:none; margin-left:22px; transition:color .25s; }
+  .footer-inner a:hover{ color:var(--ink); }
+
+  /* Reveals */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1; transform:none; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="/">Celep<em>.ai</em></a>
+    <div class="nav-links">
+      <a href="/#haltung">Haltung</a>
+      <a href="/#themen">Themenfelder</a>
+      <a href="/magazin" aria-current="page">Magazin</a>
+      <a href="/#projekte">Projekte</a>
+      <a href="/#kontakt">Kontakt</a>
+    </div>
+  </div>
+</nav>
+
+<header class="mag-head">
+  <div class="wrap">
+    <span class="mono eyebrow reveal">Magazin · Journal</span>
+    <h1 class="reveal">Gedanken mit <em>Substanz.</em></h1>
+    <p class="lead reveal">Notizen zwischen Philosophie, Psychologie, Technologie und Gesellschaft — über Ehrlichkeit, Charakter und eine Kultur, die wachsen lässt.</p>
+  </div>
+</header>
+
+<div class="mag-controls">
+  <div class="wrap mag-controls-inner">
+    <div class="mag-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input id="mag-search" type="search" autocomplete="off"
+             placeholder="Beiträge durchsuchen …" aria-label="Beiträge durchsuchen">
+    </div>
+    <div class="mag-filters">
+      <div class="mag-chips" role="group" aria-label="Themenfelder">
+        {categories.map((cat, i) => (
+          <button class={`mag-chip${i === 0 ? ' is-active' : ''}`} data-cat={cat}
+                  aria-pressed={i === 0 ? 'true' : 'false'} type="button">{cat}</button>
+        ))}
+      </div>
+      <span class="mag-count" id="mag-count" aria-live="polite">{articles.length} Beiträge</span>
+    </div>
+  </div>
+</div>
+
+<main class="mag-section">
+  <div class="wrap">
+    <div class="mag-grid" id="mag-grid">
+
+      <a class="mag-card feat" href={featured.href}
+         data-category={featured.category} data-search={haystack(featured)}>
+        <div class="c-body">
+          <span class="mono c-cat">Im Fokus · {featured.category}</span>
+          <div class="c-title">{featured.title}</div>
+          <p class="c-excerpt">{featured.excerpt}</p>
+        </div>
+        <div class="c-meta">
+          <span>{featured.date}</span><span class="dot"></span><span>{featured.read}</span>
+        </div>
+      </a>
+
+      {rest.map((a) => (
+        <a class="mag-card" href={a.href}
+           data-category={a.category} data-search={haystack(a)}>
+          <span class="mono c-cat">{a.category}</span>
+          <div class="c-title">{a.title}</div>
+          <p class="c-excerpt">{a.excerpt}</p>
+          <div class="c-meta">
+            <span>{a.date}</span><span class="dot"></span><span>{a.read}</span>
+          </div>
+        </a>
+      ))}
+
+    </div>
+
+    <div class="mag-empty" id="mag-empty" hidden>
+      <strong>Keine Beiträge gefunden.</strong>
+      Andere Suche oder ein anderes Themenfeld probieren.
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© 2026 Burak Celep · Celep.ai</span>
+    <span>
+      <a href="/impressum">Impressum</a>
+      <a href="/datenschutz">Datenschutz</a>
+    </span>
+  </div>
+</footer>
+
+<script is:inline>
+/* ---------- Suche & Filter ---------- */
+(function(){
+  const chips  = Array.prototype.slice.call(document.querySelectorAll('.mag-chip'));
+  const cards  = Array.prototype.slice.call(document.querySelectorAll('.mag-card'));
+  const search = document.getElementById('mag-search');
+  const count  = document.getElementById('mag-count');
+  const empty  = document.getElementById('mag-empty');
+  let active = 'Alle';
+
+  function apply(){
+    const q = search.value.trim().toLowerCase();
+    let n = 0;
+    cards.forEach(function(card){
+      const okCat = active === 'Alle' || card.dataset.category === active;
+      const okQ   = !q || (card.dataset.search || '').indexOf(q) !== -1;
+      const show  = okCat && okQ;
+      card.hidden = !show;
+      if(show) n++;
+    });
+    count.textContent = n === 1 ? '1 Beitrag' : n + ' Beiträge';
+    empty.hidden = n !== 0;
+  }
+
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chips.forEach(function(c){ c.classList.remove('is-active'); c.setAttribute('aria-pressed','false'); });
+      chip.classList.add('is-active'); chip.setAttribute('aria-pressed','true');
+      active = chip.dataset.cat;
+      apply();
+    });
+  });
+  search.addEventListener('input', apply);
+  apply();
+})();
+
+/* ---------- Reveals ---------- */
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('in'); }); return; }
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(function(e){ io.observe(e); });
+})();
+
+/* ---------- Nav-Linie beim Scrollen ---------- */
+(function(){
+  const nav = document.getElementById('nav');
+  const onScroll = function(){ nav.classList.toggle('scrolled', window.scrollY > 40); };
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
