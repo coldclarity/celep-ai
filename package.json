@@ -1,6 +1,6 @@
 {
   "name": "celep-ai",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
@@ -8,10 +8,6 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^6.1.10",
-    "@astrojs/sitemap": "^3.2.1",
-    "@fontsource-variable/archivo": "^5.1.0",
-    "@fontsource-variable/schibsted-grotesk": "^5.1.0",
-    "@fontsource/ibm-plex-mono": "^5.1.0"
+    "astro": "^6.1.10"
   }
 }
