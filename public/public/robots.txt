@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://celep.ai/sitemap-index.xml
